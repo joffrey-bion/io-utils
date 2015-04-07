@@ -1,6 +1,7 @@
 package org.hildan.utils.io.binary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.hildan.utils.io.binary.BitInputStream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,9 +19,11 @@ import org.junit.Test;
 public class TestBitInputStream {
 
     private static final String TEMP_FILE_IN_LONG = System.getProperty("user.home") + "/temp_test_in_long";
+
     private static final String TEMP_FILE_IN_SHORT = System.getProperty("user.home") + "/temp_test_in_short";
 
     private BitInputStream bisLong;
+
     private BitInputStream bisShort;
 
     @BeforeClass
@@ -104,49 +106,49 @@ public class TestBitInputStream {
         try {
             bisLong.readBoolean();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readByte();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readChar();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readInt();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readLong();
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readBits(1);
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readBits(5);
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
         try {
             bisLong.readBitsAsString(5);
             fail();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             // OK
         }
     }

@@ -9,13 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.hildan.utils.io.binary.BitOutputStream;
 import org.junit.Test;
 
 public class TestBitOutputStream {
 
     private static final String TEMP_FILE_OUT = System.getProperty("user.home") + "/temp_test_out";
-        
+
     @Test
     public void testOutputSream() throws IOException {
         try (BitOutputStream out = new BitOutputStream(new FileOutputStream(TEMP_FILE_OUT))) {

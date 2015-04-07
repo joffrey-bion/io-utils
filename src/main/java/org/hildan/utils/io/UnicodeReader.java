@@ -8,18 +8,20 @@ import java.io.PushbackInputStream;
 import java.io.Reader;
 
 /**
- * A reader that reads and skips the BOM (Byte Order Mark), using it to determine the
- * encoding of the file.
+ * A reader that reads and skips the BOM (Byte Order Mark), using it to determine the encoding of
+ * the file.
  */
 public class UnicodeReader extends Reader {
 
     private static final int BOM_SIZE = 4;
+
     private final BufferedReader reader;
+
     private String encoding;
 
     /**
-     * Creates a {@code UnicodeReader} for the specified file. Uses system default
-     * encoding if BOM is not found.
+     * Creates a {@code UnicodeReader} for the specified file. Uses system default encoding if BOM
+     * is not found.
      *
      * @param filename
      *            Input file.
@@ -36,8 +38,8 @@ public class UnicodeReader extends Reader {
      * @param filename
      *            Input file.
      * @param defaultEncoding
-     *            Default encoding to be used if BOM is not found, or
-     *            <code>null</code> to use system default encoding.
+     *            Default encoding to be used if BOM is not found, or <code>null</code> to use
+     *            system default encoding.
      * @throws IOException
      *             If an I/O error occurs.
      */
@@ -85,10 +87,9 @@ public class UnicodeReader extends Reader {
     }
 
     /**
-     * Returns the encoding used to read the file. It was determined by the BOM if
-     * any, otherwise it is the given default encoding or system default, as
-     * specified by {@link #UnicodeReader(String)} or
-     * {@link #UnicodeReader(String, String)}.
+     * Returns the encoding used to read the file. It was determined by the BOM if any, otherwise it
+     * is the given default encoding or system default, as specified by
+     * {@link #UnicodeReader(String)} or {@link #UnicodeReader(String, String)}.
      *
      * @return The encoding used to read the file.
      */

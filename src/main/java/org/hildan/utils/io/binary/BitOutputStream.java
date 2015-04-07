@@ -5,19 +5,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Represents a stream of bits. It wraps any {@link OutputStream}, buffering it so
- * that it can be written bit by bit. A {@link BitOutputStream} also allows to write
- * unaligned {@code byte}s, {@code char} s, {@code int}s and {@code long}s.
+ * Represents a stream of bits. It wraps any {@link OutputStream}, buffering it so that it can be
+ * written bit by bit. A {@link BitOutputStream} also allows to write unaligned {@code byte}s,
+ * {@code char} s, {@code int}s and {@code long}s.
  */
 public class BitOutputStream extends BufferedOutputStream {
 
     private long buffer = 0;
+
     private int bufferLength = 0;
 
     /**
-     * Creates a new {@link BitOutputStream} wrapping the specified
-     * {@link OutputStream}.
-     * 
+     * Creates a new {@link BitOutputStream} wrapping the specified {@link OutputStream}.
+     *
      * @param out
      *            the {@link OutputStream} to wrap
      */
@@ -26,9 +26,8 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Creates a new {@link BitOutputStream} wrapping the specified
-     * {@link OutputStream}.
-     * 
+     * Creates a new {@link BitOutputStream} wrapping the specified {@link OutputStream}.
+     *
      * @param out
      *            the {@link OutputStream} to wrap
      * @param size
@@ -39,9 +38,9 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Returns the value of the last n bits. If {@code n > 63}, the initial value is
-     * returned. If {@code n == 0}, 0 is returned (no bit kept).
-     * 
+     * Returns the value of the last n bits. If {@code n > 63}, the initial value is returned. If
+     * {@code n == 0}, 0 is returned (no bit kept).
+     *
      * @param value
      *            the value to keep the last n bits from
      * @param n
@@ -55,23 +54,23 @@ public class BitOutputStream extends BufferedOutputStream {
         } else if (n > 63) {
             return value;
         }
-        int numBitsToDelete = Long.SIZE - n;
-        return (value << numBitsToDelete) >>> numBitsToDelete;
+        final int numBitsToDelete = Long.SIZE - n;
+        return value << numBitsToDelete >>> numBitsToDelete;
     }
 
     /**
      * Returns the complete bytes within the specified bits.
-     * 
+     *
      * @param value
      *            the bits value
      * @param n
      *            the number of least significant bits to consider
-     * @return a byte array containing the complete bytes from the most significant
-     *         bits to the least significant ones.
+     * @return a byte array containing the complete bytes from the most significant bits to the
+     *         least significant ones.
      */
     private static byte[] getCompleteBytes(long value, int n) {
-        byte[] bytes = new byte[n / 8];
-        long completeBytes = value >>> (n % 8);
+        final byte[] bytes = new byte[n / 8];
+        long completeBytes = value >>> n % 8;
         for (int i = 0; i < bytes.length; i++) {
             bytes[bytes.length - i - 1] = (byte) (completeBytes & 0xFF);
             completeBytes >>>= 8;
@@ -80,15 +79,14 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Writes the complete bytes of the buffer to the underlying
-     * {@link BufferedOutputStream}.
-     * 
+     * Writes the complete bytes of the buffer to the underlying {@link BufferedOutputStream}.
+     *
      * @throws IOException
      *             if an I/O error occurs
      */
     private void writeBufferExcess() throws IOException {
-        byte[] bytes = getCompleteBytes(buffer, bufferLength);
-        for (byte b : bytes) {
+        final byte[] bytes = getCompleteBytes(buffer, bufferLength);
+        for (final byte b : bytes) {
             super.write(b);
             bufferLength -= 8;
         }
@@ -98,7 +96,7 @@ public class BitOutputStream extends BufferedOutputStream {
 
     /**
      * Writes the specified bit to this {@link BitOutputStream}.
-     * 
+     *
      * @param bit
      *            the bit to write, as an int
      * @throws IOException
@@ -115,13 +113,13 @@ public class BitOutputStream extends BufferedOutputStream {
 
     /**
      * Writes the specified bit to this {@link BitOutputStream}.
-     * 
+     *
      * @param value
      *            the value of the bits to write
      * @param nBits
-     *            the number of bits to write. Must not exceed {@link Long#SIZE}. The
-     *            least significant (right-most) bits are taken from the input value.
-     * 
+     *            the number of bits to write. Must not exceed {@link Long#SIZE}. The least
+     *            significant (right-most) bits are taken from the input value.
+     *
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -130,13 +128,13 @@ public class BitOutputStream extends BufferedOutputStream {
             throw new IllegalArgumentException("cannot write more bits than the length of a long");
         }
         if (nBits <= 8) {
-            long cleanBits = keepLastNBits(value, nBits);
+            final long cleanBits = keepLastNBits(value, nBits);
             buffer = (buffer << nBits) + cleanBits;
             bufferLength += nBits;
             writeBufferExcess();
         } else {
-            byte[] bytes = getCompleteBytes(value, nBits);
-            for (byte b : bytes) {
+            final byte[] bytes = getCompleteBytes(value, nBits);
+            for (final byte b : bytes) {
                 writeBits(b, 8);
             }
             writeBits(value, nBits - 8 * bytes.length);
@@ -147,7 +145,7 @@ public class BitOutputStream extends BufferedOutputStream {
     public synchronized void flush() throws IOException {
         writeBufferExcess();
         if (bufferLength > 0) {
-            super.write((int) (buffer << (8 - bufferLength)));
+            super.write((int) (buffer << 8 - bufferLength));
         }
         super.flush();
     }
@@ -169,8 +167,7 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Writes the given byte to this stream, with leading zeros to reach
-     * {@link Byte#SIZE}.
+     * Writes the given byte to this stream, with leading zeros to reach {@link Byte#SIZE}.
      *
      * @param value
      *            The value to write.
@@ -195,8 +192,7 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Writes the given integer to this stream, with leading zeros to reach
-     * {@link Integer#SIZE}.
+     * Writes the given integer to this stream, with leading zeros to reach {@link Integer#SIZE}.
      *
      * @param value
      *            The value to write.
@@ -208,8 +204,7 @@ public class BitOutputStream extends BufferedOutputStream {
     }
 
     /**
-     * Writes the given long to this stream, with leading zeros to reach
-     * {@link Long#SIZE}.
+     * Writes the given long to this stream, with leading zeros to reach {@link Long#SIZE}.
      *
      * @param value
      *            The value to write.
@@ -224,8 +219,8 @@ public class BitOutputStream extends BufferedOutputStream {
      * Writes the given binary string to a buffer that will be written byte by byte.
      *
      * @param binaryString
-     *            A binary {@code String}. This {@code String} must contain only the
-     *            characters '0' or '1'.
+     *            A binary {@code String}. This {@code String} must contain only the characters '0'
+     *            or '1'.
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -233,7 +228,7 @@ public class BitOutputStream extends BufferedOutputStream {
         if (!binaryString.matches("[01]*")) {
             throw new IllegalArgumentException("The input string '" + binaryString + "' must contain only 0s and 1s.");
         }
-        for (char c : binaryString.toCharArray()) {
+        for (final char c : binaryString.toCharArray()) {
             if (c == '0') {
                 writeBit(0);
             } else {
