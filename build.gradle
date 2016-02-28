@@ -3,10 +3,11 @@ plugins { id "com.jfrog.bintray" version "1.0" }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 group = 'org.hildan.utils'
 version = '0.9'
-sourceCompatibility = '1.7'
+description = 'Useful custom I/O-related classes, especially binary and general unicode stream readers/writers, and parsing utils.'
 
 repositories { mavenCentral() }
 
@@ -29,16 +30,16 @@ artifacts {
 }
 
 bintray {
-    user = project.bintrayUsername // taken from gradle.properties
-    key = project.bintrayApiKey // taken from gradle.properties
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
     configurations = ['archives']
 
     publish = true // the version should be auto published after an upload
 
     pkg {
-        repo = project.bintrayRepoLibs // taken from gradle.properties
+        repo = project.hasProperty('bintrayRepoLibs') ? project.bintrayRepoLibs : ''
         name = project.name
-        desc = 'Useful custom I/O-related classes, especially binary and general unicode stream readers/writers, and parsing utils.'
+        desc = project.description
         labels = ['io', 'binary', 'inputstream', 'outputstream', 'stream', 'unicode']
 
         String githubRepoName = project.name
@@ -47,6 +48,9 @@ bintray {
         vcsUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '.git'
 
         licenses = ['MIT']
-        version { gpg { sign = true } }
+        version {
+            vcsTag = 'v' + project.version
+            gpg { sign = true }
+        }
     }
 }
